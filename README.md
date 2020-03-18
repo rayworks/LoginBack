@@ -1,6 +1,7 @@
 # LoginBack
 
-It demonstrates a more robust way to implement ` user login` based on  `ViewModel` of [Jetpack (https://developer.android.google.cn/jetpack).
+It demonstrates a more robust way to implement ` user login` based on  `ViewModel` of 
+[Jetpack](https://developer.android.google.cn/jetpack).
 
 
 > Android 10 (API level 29) and higher place restrictions on when apps can start activities when the app is running in the background. These restrictions help minimize interruptions for the user and keep the user more in control of what's shown on their screen.
