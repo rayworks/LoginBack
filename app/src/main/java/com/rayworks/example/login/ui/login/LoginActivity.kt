@@ -3,6 +3,7 @@ package com.rayworks.example.login.ui.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.microsoft.appcenter.analytics.Analytics
 import com.rayworks.example.login.R
 import com.rayworks.example.login.ui.MainActivity
 import timber.log.Timber
@@ -100,6 +102,14 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+
+//        enableTracking()
+
+        Analytics.trackEvent("App started")
+
+        Handler().postDelayed({
+            throw IllegalStateException("Test Exception")
+        }, 2000)
     }
 
     private fun navigateToMainPage() {
