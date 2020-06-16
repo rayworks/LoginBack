@@ -19,11 +19,16 @@ import androidx.lifecycle.ViewModelProviders
 import com.microsoft.appcenter.analytics.Analytics
 import com.rayworks.example.login.R
 import com.rayworks.example.login.ui.MainActivity
+import com.rayworks.example.login.utils.NativeCrashesListener
 import timber.log.Timber
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
+
+    init {
+        System.loadLibrary("crash-lib")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,13 +108,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-//        enableTracking()
-
         Analytics.trackEvent("App started")
-
-        Handler().postDelayed({
-            throw IllegalStateException("Test Exception")
-        }, 2000)
     }
 
     private fun navigateToMainPage() {
@@ -129,6 +128,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    fun clickToCrash(view: View) {
+        NativeCrashesListener().testNow()
     }
 }
 

@@ -75,4 +75,10 @@
         app:layout_constraintStart_toStartOf="@+id/password"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
+
+    <Button
+        android:text="Crash Me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="clickToCrash" />
 </androidx.constraintlayout.widget.ConstraintLayout>
