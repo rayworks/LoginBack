@@ -13,8 +13,8 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import com.rayworks.example.login.EventObserver
 import com.rayworks.example.login.R
 import com.rayworks.example.login.ui.MainActivity
 import timber.log.Timber
@@ -33,11 +33,11 @@ class LoginActivity : AppCompatActivity() {
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
 
-        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
 
-        loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
-            val loginState = it ?: return@Observer
+        loginViewModel.loginFormState.observe(this@LoginActivity, EventObserver {
+            val loginState = it
 
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
@@ -50,11 +50,10 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        loginViewModel.loginResult.observe(this@LoginActivity, Observer {
+        loginViewModel.loginResult.observe(this@LoginActivity, EventObserver {
             Timber.d(">>> login callback invoked")
 
-            val loginResult = it ?: return@Observer
-
+            val loginResult = it
             loading.visibility = View.GONE
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)

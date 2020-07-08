@@ -1,14 +1,16 @@
 package com.rayworks.example.login.ui.login
 
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
 import androidx.lifecycle.viewModelScope
+
+import com.rayworks.example.login.Event
+import com.rayworks.example.login.R
 import com.rayworks.example.login.data.LoginRepository
 import com.rayworks.example.login.data.Result
 
-import com.rayworks.example.login.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,11 +19,11 @@ import timber.log.Timber
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
-    private val _loginForm = MutableLiveData<LoginFormState>()
-    val loginFormState: LiveData<LoginFormState> = _loginForm
+    private val _loginForm = MutableLiveData<Event<LoginFormState>>()
+    val loginFormState: LiveData<Event<LoginFormState>> = _loginForm
 
-    private val _loginResult = MutableLiveData<LoginResult>()
-    val loginResult: LiveData<LoginResult> = _loginResult
+    private val _loginResult = MutableLiveData<Event<LoginResult>>()
+    val loginResult: LiveData<Event<LoginResult>> = _loginResult
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
@@ -36,24 +38,23 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                     Timber.d(">>> about to call login callback ")
                     if (result is Result.Success) {
                         _loginResult.value =
-                            LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+                            Event(LoginResult(success = LoggedInUserView(displayName = result.data.displayName)))
                     } else {
-                        _loginResult.value = LoginResult(error = R.string.login_failed)
+                        _loginResult.value = Event(LoginResult(error = R.string.login_failed))
                     }
                 }
 
             }
         }
-
     }
 
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
+            _loginForm.value = Event(LoginFormState(usernameError = R.string.invalid_username))
         } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
+            _loginForm.value = Event(LoginFormState(passwordError = R.string.invalid_password))
         } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
+            _loginForm.value = Event(LoginFormState(isDataValid = true))
         }
     }
 
